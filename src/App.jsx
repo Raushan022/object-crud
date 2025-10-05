@@ -22,6 +22,12 @@ function App() {
     });
   };
 
+  const handleDelete = (todoIndex) => {
+    const copyAllTodos = [...allTodos];
+    copyAllTodos.splice(todoIndex, 1);
+    setAllTodos(copyAllTodos);
+  };
+
   const todoSubmitHandler = (e) => {
     e.preventDefault();
 
@@ -113,6 +119,7 @@ function App() {
                       <i className="ri-image-edit-line"></i>
                     </button>
                     <button
+                      onClick={() => handleDelete(index)}
                       style={{
                         border: "none",
                         width: 32,
