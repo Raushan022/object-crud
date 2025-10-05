@@ -5,6 +5,8 @@ import "./App.css";
 function App() {
   const [openDrawer, setOpenDrawer] = useState(-450);
   const [allTodos, setAllTodos] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
   const [formData, setFormData] = useState({
     fullName: "",
     roll: "",
@@ -28,10 +30,30 @@ function App() {
     setAllTodos(copyAllTodos);
   };
 
+  const editTodo = (todoItem, todoIndex) => {
+    setIsEditing(true);
+    setOpenDrawer(0);
+    setFormData(todoItem);
+    setEditIndex(todoIndex);
+  };
+
   const todoSubmitHandler = (e) => {
     e.preventDefault();
+    setIsEditing(false);
 
-    setAllTodos([...allTodos, formData]);
+    if (isEditing) {
+      // If we're in editing mode (isEditing is true), we need to update the existing todo
+      // Step 1: Create a copy of the current todos list
+      const updatedTodos = [...allTodos];
+
+      // Step 2: Replace the todo at the index of the todo we're editing (editIndex)
+      updatedTodos[editIndex] = formData;
+
+      // Step 3: Update the state with the new list of todos (which includes the edited todo)
+      setAllTodos(updatedTodos);
+    } else {
+      setAllTodos([...allTodos, formData]);
+    }
 
     setFormData({
       fullName: "",
@@ -39,7 +61,7 @@ function App() {
       subject: "",
       dob: "",
     });
-    setOpenDrawer(-450);
+    // setOpenDrawer(-450);
   };
 
   return (
@@ -106,6 +128,7 @@ function App() {
 
                   <td>
                     <button
+                      onClick={() => editTodo(todo, index)}
                       style={{
                         border: "none",
                         width: 32,
@@ -232,14 +255,14 @@ function App() {
               onClick={todoSubmitHandler}
               style={{
                 border: "none",
-                background: "#7a1396",
+                background: isEditing ? "#137f11" : "#7a1396",
                 color: "white",
                 padding: "14px 24px",
                 borderRadius: 4,
                 fontSize: 16,
               }}
             >
-              Submit
+              {isEditing ? "Update" : "Submit"}
             </button>
           </form>
         </aside>
