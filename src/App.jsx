@@ -4,6 +4,37 @@ import "./App.css";
 
 function App() {
   const [openDrawer, setOpenDrawer] = useState(-450);
+  const [allTodos, setAllTodos] = useState([]);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    roll: "",
+    subject: "",
+    dob: "",
+  });
+
+  const handleFormChange = (e) => {
+    const text = e.target.value;
+    const formKey = e.target.name;
+
+    setFormData({
+      ...formData,
+      [formKey]: text,
+    });
+  };
+
+  const todoSubmitHandler = (e) => {
+    e.preventDefault();
+
+    setAllTodos([...allTodos, formData]);
+
+    setFormData({
+      fullName: "",
+      roll: "",
+      subject: "",
+      dob: "",
+    });
+    setOpenDrawer(-450);
+  };
 
   return (
     <>
@@ -52,7 +83,6 @@ function App() {
                 <th>S/No</th>
                 <th>Student's Name</th>
                 <th>Subject</th>
-                <th>Class</th>
                 <th>Roll</th>
                 <th>DOB</th>
                 <th>Action</th>
@@ -60,42 +90,43 @@ function App() {
             </thead>
 
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Raushan</td>
-                <td>Maths</td>
-                <td>1</td>
-                <td>12</td>
-                <td>12/10/2024</td>
+              {allTodos.map((todo, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{todo.fullName}</td>
+                  <td>{todo.subject}</td>
+                  <td>{todo.roll}</td>
+                  <td>{todo.dob}</td>
 
-                <div>
-                  <button
-                    style={{
-                      border: "none",
-                      width: 32,
-                      height: 32,
-                      background: "#07c65d",
-                      color: "white",
-                      borderRadius: 4,
-                      marginRight: 12,
-                    }}
-                  >
-                    <i className="ri-image-edit-line"></i>
-                  </button>
-                  <button
-                    style={{
-                      border: "none",
-                      width: 32,
-                      height: 32,
-                      background: "red",
-                      color: "white",
-                      borderRadius: 4,
-                    }}
-                  >
-                    <i className="ri-delete-bin-6-line"></i>
-                  </button>
-                </div>
-              </tr>
+                  <td>
+                    <button
+                      style={{
+                        border: "none",
+                        width: 32,
+                        height: 32,
+                        background: "#07c65d",
+                        color: "white",
+                        borderRadius: 4,
+                        marginRight: 12,
+                      }}
+                    >
+                      <i className="ri-image-edit-line"></i>
+                    </button>
+                    <button
+                      style={{
+                        border: "none",
+                        width: 32,
+                        height: 32,
+                        background: "red",
+                        color: "white",
+                        borderRadius: 4,
+                      }}
+                    >
+                      <i className="ri-delete-bin-6-line"></i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -139,6 +170,8 @@ function App() {
               required
               name="fullName"
               type="text"
+              value={formData.fullName}
+              onChange={handleFormChange}
               placeholder="Enter Full Name"
               style={{
                 border: "1px solid #ccc",
@@ -151,6 +184,8 @@ function App() {
               required
               name="roll"
               type="number"
+              value={formData.roll}
+              onChange={handleFormChange}
               placeholder="Enter Your Roll"
               style={{
                 border: "1px solid #ccc",
@@ -163,6 +198,8 @@ function App() {
               required
               name="subject"
               type="text"
+              value={formData.subject}
+              onChange={handleFormChange}
               placeholder="Enter Full Subject"
               style={{
                 border: "1px solid #ccc",
@@ -175,6 +212,8 @@ function App() {
               required
               name="dob"
               type="date"
+              value={formData.dob}
+              onChange={handleFormChange}
               style={{
                 border: "1px solid #ccc",
                 padding: 16,
@@ -183,6 +222,7 @@ function App() {
             />
 
             <button
+              onClick={todoSubmitHandler}
               style={{
                 border: "none",
                 background: "#7a1396",
