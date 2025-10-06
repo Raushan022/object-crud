@@ -175,7 +175,10 @@ function App() {
           }}
         >
           <button
-            onClick={() => setOpenDrawer(-450)}
+            onClick={() => {
+              setOpenDrawer(-450);
+              setIsEditing(false);
+            }}
             style={{
               border: "none",
               background: "transparent",
